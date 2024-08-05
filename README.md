@@ -141,3 +141,107 @@ Which produces the following chart:
 
 As you can see, the  W' balance model is a powerful tool for evaluating an athlete's pacing strategy and energy utilization during a race or a training session. By plotting the power output and W' balance over time, we can gain insights into how effectively the athlete managed their energy reserves. For example, when W' balance hits zero at the end of a race or test, it indicates that the athlete has fully utilized their available W' and paced the effort perfectly. This is often a sign of optimal pacing strategy. Alternativley, 
 if the athlete finishes the race with a positive W' balance, it suggests that they had some unused energy reserve. This might indicate conservative pacing, where the athlete could have potentially exerted more power and achieved a faster time.
+
+# Critical Metabolic Rate and M' Balance
+
+Critical Metabolic Rate (CMR) and Critical Power (CP) are concepts used to model an athlete's performance and endurance capabilities. While they share some similarities, they are applied to different physiological parameters and provide insights into different aspects of athletic performance. For example, critical metabolic rate (CMR) is applied to muscle oxygenation rates of change (ΔSmO2), and CMR represents the highest sustainable rate of muscle oxygenation change (%/s) an athlete can maintain over a prolonged period without leading to an unsustainable drop in muscle oxygenation levels.
+
+In the code block below, I'll show you how to calculate an athlete's critical metabolic rate using historic training data from multiple time to exhaustion trials:
+```python
+# import libraries
+import numpy as np
+import pandas as pd
+from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
+
+# create data frame to store deoxy - duration data
+data = pd.DataFrame({
+    'De-oxy rate': [-0.019, -0.035, -0.048, -0.068, -0.22], 
+    'Duration': [7200, 4800, 3600, 2400, 1200]})
+
+# define function for critical metabolic rate model
+def critical_metabolic_rate(t, CMR, M_prime):
+    return CMR + M_prime / t
+
+# extract deoxy rate and duration data from data frame
+deoxy_rate = data['De-oxy rate'].values
+duration = data['Duration'].values
+
+# perform non-linear regression to fit the deoxy rate - duration model 
+popt, pcov = curve_fit(critical_metabolic_rate, duration, deoxy_rate)
+CMR, M_prime = popt
+
+# print the estimated parameters
+print(f"Estimated Critical Metabolic Rate (CMR): {CMR:.5f} %/s")
+print(f"Estimated M': {M_prime:.5f}")
+```
+Which produces the following output:
+- Estimated Critical Metabolic Rate (CMR): 0.03111 %/s
+- Estimated M': -290.96203
+
+Ordinarily critical metabolic rate is negative and approximates zero, but in some cases we may see a positive value. Additionally, M' is negative since it represents the area between the deoxy-duration curve and the y-intercept (i.e, critical metabolic rate), as demonstrated in the image below. However, we will invert the sign on M' when modeling M' balance as you'll see in the next code block. 
+
+[IMAGE]
+
+Now, we'll use our calculated critical metabolic rate and M' as inputs for our M' balance model, which is an adaptation of the W' balance model used in the context of critical power. The M' balance model applies the same principles to muscle oxygenation data, focusing on the rate of change of muscle oxygen saturation (ΔSmO2) instead of power output, as demonstrated in the code block below:
+```python
+filename = 'O2.csv'
+names = ['time', 'SmO2', 'SmO2_accel', 'SmO2_jerk', 'acceleration','jerk']
+workout_data = pd.read_csv(filename, names=names)
+
+# Define a rolling window size
+window_size = 10
+
+# calculate rolling metrics
+workout_data['SmO2_rolling_mean'] = workout_data['SmO2'].rolling(window=window_size).mean()
+workout_data['SmO2_accel_rolling_mean'] = workout_data['SmO2_accel'].rolling(window=window_size).mean()
+workout_data = workout_data.fillna(method='bfill')
+
+CMR = CMR
+M_prime = M_prime * - 1 # Invert sign
+
+# initialize M' balance model
+M_bal = np.zeros(len(workout_data))
+M_bal[0] = M_prime
+tau_recovery = 300  # Example recovery time constant, adjust as needed
+
+# update M' balance
+for i in range(1, len(workout_data)):
+    dt = workout_data['time'].iloc[i] - workout_data['time'].iloc[i - 1]
+    d_rate = workout_data['SmO2_accel_rolling_mean'].iloc[i]
+    if d_rate < CMR: # Depletion of M'
+        M_bal[i] = M_bal[i - 1] - (CMR - d_rate) * dt
+    else: # restoration of M'
+        M_bal[i] = M_bal[i - 1] + (M_prime - M_bal[i - 1]) * (1 - np.exp(-dt / tau_recovery))
+
+    # Ensure M' balance does not go below 0 or above M'
+
+# add M' balance to workout data
+workout_data['M_bal'] = M_bal
+
+# create subplots
+fig, ax1 = plt.subplots(figsize=(10, 6))
+
+# plot M' Balance on the left y-axis
+ax1.plot(workout_data['time'], workout_data['M_bal'], label="M' Balance", color='red')
+ax1.set_xlabel('Time (seconds)')
+ax1.set_ylabel("M' Balance", color='red')
+ax1.tick_params(axis='y', labelcolor='red')
+
+# create a second y-axis to plot SmO2
+ax2 = ax1.twinx()
+ax2.plot(workout_data['time'], workout_data['SmO2'], label='Δ SmO2 Rate', color='blue')
+ax2.set_ylabel('Muscle oxygenation (%)', color='blue')
+ax2.tick_params(axis='y', labelcolor='blue')
+
+# add legends and show plot
+lines, labels = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+ax1.legend(lines + lines2, labels + labels2, loc='best')
+plt.show()
+```
+Which produces the following output:
+
+
+
+
