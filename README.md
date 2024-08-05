@@ -1,8 +1,10 @@
 # Project Background 
-👽 
+In this project repository I'm going to demonstrate the modeling of critical power (CP), W' balance, critical metabolic rate (CMR), and M' balance using real-world physiological data. This project aims to provide a comprehensive guide on how to analyze and interpret key performance metrics essential for endurance athletes. Critical power represents the highest power output an athlete can sustain for an extended period without fatigue, while W' balance quantifies the anaerobic energy reserve that depletes and replenishes during varying intensities of exercise. Similarly, the critical metabolic rate indicates the highest sustainable rate of muscle oxygenation change, and M' balance tracks the total metabolic capacity in the context of muscle oxygenation.
 
+In this repository, you will find detailed code examples and explanations on how to calculate these measurements from power output and muscle oxygenation data. By modeling these metrics, we can gain insights into an athlete's performance, pacing strategies, and recovery capabilities. The repository will demonstrate how to apply these models to real-world scenarios, enabling athletes and coaches to optimize training and racing strategies based on precise physiological measurements.
 
-# What Is Critical Power?
+# Critical Power and The W' Balance Model
+### What Is Critical Power?
 Critical power is mathematically defined as the power-asymptote of the hyperbolic relationship between power output and time to exhaustion. In essence, critical power describes the duration that an individual can sustain a fixed power output in the severe exercise intensity domain, and physiologically critical power represents the boundary between steady-state and non-steady-state exercise]. As a result, critical power may provide a more meaningful fitness index over more well-known performance metrics such as VO2max or functional threshold power. The hyperbolic equation which describes the relationship between power output and exercise tolerance within the severe exercise intensity domain is as follows:
 
 ```
@@ -15,7 +17,7 @@ This equation creates a two-parameter model where critical power represents the 
 
 Taken together, these two parameters can be used to predict how long an individual can exercise at any intensity above their critical power output. Interestingly, the critical power model appears to apply across kingdoms, phylums,  and classes of animal life as well as different forms of exercise, and individual muscles for a given athlete. These observations suggest a highly conserved and organized physiological process, and perhaps a unifying principle of bioenergetics.
 
-# How Is Critical Power Calculated?
+### How Is Critical Power Calculated?
 There are currently two validated methods for determining critical power and the fixed amount of work that can be done above critical power, termed W’. Traditionally critical power and W’ were calculated after having an individual perform three to seven all-out work bouts where they hold a fixed power-output until failure. These test results are then plotted on a chart where the x,y variables represent time to failure and power for each trial. Critical power is then determined as the slope of the work-time relationship, whereas W’ is determined from the y-intercept. More recently, though, investigators have introduced a 3-minute all-out exercise test, known as the 3MT, that has enabled the determination of critical power and W’ from a single exercise bout. The idea behind the 3-minute all-out test is that when a subject exerts themselves fully and expends W’ wholly, their finishing power output equals their critical power. 
 
 In the code block below, I'll show you how to calcualte critical power using an athlete's historic training data from multiple time to exhaustion trials:
@@ -73,7 +75,7 @@ Now, as previously mentioned, the following formula can be used to calculate an 
 
 However, a major limitation of the formula above is that it's only applicable during fixed power output work bouts and does not account for scenarios where poewr output varies, such as during interval training or racing where power can fluctuate by a large degree moment to moment. In these scenarios, it's necessary to go beyond the traditional critical power model. 
 
-# Beyong Critical Power: The W' Balance Model
+### Beyong Critical Power: The W' Balance Model
 
 Whereas teh traditional critical power model allows you to predicting the time to exhaustion when power is held constant, the W' balance model allows us to account for varying power outputs and dynamic work/rest scenarios. This model tracks the depletion and recovery of W' over time, providing a more accurate prediction of an athlete's fatigue status during activities with changing intensities. For example, when an athlete's power output is greater than their critical power, W' is depleted (the rate of depletion is proportional to how much power exceeds critical power). Alternativley, when an athlete's power ouput is below their critical power, W' is restored and the rate of recovery is a function of the difference between their critical power and current power output and their recovery constant, Tau. 
 
@@ -142,7 +144,7 @@ Which produces the following chart:
 As you can see, the  W' balance model is a powerful tool for evaluating an athlete's pacing strategy and energy utilization during a race or a training session. By plotting the power output and W' balance over time, we can gain insights into how effectively the athlete managed their energy reserves. For example, when W' balance hits zero at the end of a race or test, it indicates that the athlete has fully utilized their available W' and paced the effort perfectly. This is often a sign of optimal pacing strategy. Alternativley, 
 if the athlete finishes the race with a positive W' balance, it suggests that they had some unused energy reserve. This might indicate conservative pacing, where the athlete could have potentially exerted more power and achieved a faster time.
 
-# Critical Metabolic Rate and M' Balance
+# Critical Metabolic Rate and The M' Balance Model
 
 Critical Metabolic Rate (CMR) and Critical Power (CP) are concepts used to model an athlete's performance and endurance capabilities. While they share some similarities, they are applied to different physiological parameters and provide insights into different aspects of athletic performance. For example, critical metabolic rate (CMR) is applied to muscle oxygenation rates of change (ΔSmO2), and CMR represents the highest sustainable rate of muscle oxygenation change (%/s) an athlete can maintain over a prolonged period without leading to an unsustainable drop in muscle oxygenation levels.
 
@@ -181,7 +183,7 @@ Which produces the following output:
 
 Ordinarily critical metabolic rate is negative and approximates zero, but in some cases we may see a positive value. Additionally, M' is negative since it represents the area between the deoxy-duration curve and the y-intercept (i.e, critical metabolic rate), as demonstrated in the image below. However, we will invert the sign on M' when modeling M' balance as you'll see in the next code block. 
 
-[IMAGE]
+<img src="images/cmr.png" alt="Description" width="400" height="300">
 
 Now, we'll use our calculated critical metabolic rate and M' as inputs for our M' balance model, which is an adaptation of the W' balance model used in the context of critical power. The M' balance model applies the same principles to muscle oxygenation data, focusing on the rate of change of muscle oxygen saturation (ΔSmO2) instead of power output, as demonstrated in the code block below:
 ```python
@@ -242,6 +244,8 @@ plt.show()
 ```
 Which produces the following output:
 
+<img src="images/m_balance.png" alt="Description" width="600" height="400">
 
+In the image above you can see an athlete's muscle oxygenation data during a ~4 hour bike ride in the mountains. During the ride their M' progressiveley decreases, with short periods of restoration when they lighten the pace, without fully being depleted. With enough prior data, it's possible to both retroactivley analyze an athletes muscle oxygenation data using the M' balance model to see how close they pushed themself to their physiological limit, or to use this informaton for real-time pace guidance to optimize performance during training and racing. 
 
 
