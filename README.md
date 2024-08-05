@@ -1,3 +1,7 @@
+# Project Background 
+👽 
+
+
 # What Is Critical Power?
 Critical power is mathematically defined as the power-asymptote of the hyperbolic relationship between power output and time to exhaustion. In essence, critical power describes the duration that an individual can sustain a fixed power output in the severe exercise intensity domain, and physiologically critical power represents the boundary between steady-state and non-steady-state exercise]. As a result, critical power may provide a more meaningful fitness index over more well-known performance metrics such as VO2max or functional threshold power. The hyperbolic equation which describes the relationship between power output and exercise tolerance within the severe exercise intensity domain is as follows:
 
