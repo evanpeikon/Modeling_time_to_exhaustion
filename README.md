@@ -133,4 +133,7 @@ plt.show()
 ```
 Which produces the following chart:
 
+<img src="images/w_bal.png" alt="Description" width="600" height="400">
 
+As you can see, the  W' balance model is a powerful tool for evaluating an athlete's pacing strategy and energy utilization during a race or a training session. By plotting the power output and W' balance over time, we can gain insights into how effectively the athlete managed their energy reserves. For example, when W' balance hits zero at the end of a race or test, it indicates that the athlete has fully utilized their available W' and paced the effort perfectly. This is often a sign of optimal pacing strategy. Alternativley, 
+if the athlete finishes the race with a positive W' balance, it suggests that they had some unused energy reserve. This might indicate conservative pacing, where the athlete could have potentially exerted more power and achieved a faster time.
