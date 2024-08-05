@@ -232,7 +232,7 @@ ax1.tick_params(axis='y', labelcolor='red')
 
 # create a second y-axis to plot SmO2
 ax2 = ax1.twinx()
-ax2.plot(workout_data['time'], workout_data['SmO2'], label='Δ SmO2 Rate', color='blue')
+ax2.plot(workout_data['time'], workout_data['SmO2_rolling_mean'], label='Δ SmO2 Rate', color='blue')
 ax2.set_ylabel('Muscle oxygenation (%)', color='blue')
 ax2.tick_params(axis='y', labelcolor='blue')
 
