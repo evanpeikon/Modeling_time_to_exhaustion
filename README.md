@@ -71,11 +71,11 @@ Which produces the following chart:
 
 <img src="images/cp2.png" alt="Description" width="400" height="300">
 
-Now, as previously mentioned, the following formula can be used to calculate an athlete's time to exhaustion when exercising at a fixed power output when both their critical power adn W' are known: ```Time to Exhaustion = W’ / Power - Critical Power``` For example, if an athlete's critical power is 306 watts, their W' is 50664 joules we can use the following formula to see how long they can sustain a fixed power output of 500 watts: ```Time to exhaustion = 50664 / 500 - 306 = 261 seconds```
+Now, as previously mentioned, the following formula can be used to calculate an athlete's time to exhaustion when exercising at a fixed power output when both their critical power adn W' are known: ```Time to Exhaustion = W’ / Power - Critical Power```. For example, if an athlete's critical power is 306 watts, their W' is 50664 joules we can use the following formula to see how long they can sustain a fixed power output of 500 watts: ```Time to exhaustion = 50664 / 500 - 306 = 261 seconds```
 
 However, a major limitation of the formula above is that it's only applicable during fixed power output work bouts and does not account for scenarios where poewr output varies, such as during interval training or racing where power can fluctuate by a large degree moment to moment. In these scenarios, it's necessary to go beyond the traditional critical power model. 
 
-### Beyong Critical Power: The W' Balance Model
+### Beyond Critical Power: The W' Balance Model
 
 Whereas the traditional critical power model allows you to predicting the time to exhaustion when power is held constant, the W' balance model allows us to account for varying power outputs and dynamic work/rest scenarios. This model tracks the depletion and recovery of W' over time, providing a more accurate prediction of an athlete's fatigue status during activities with changing intensities. For example, when an athlete's power output is greater than their critical power, W' is depleted (the rate of depletion is proportional to how much power exceeds critical power). Alternativley, when an athlete's power ouput is below their critical power, W' is restored and the rate of recovery is a function of the difference between their critical power and current power output and their recovery constant, Tau. 
 
