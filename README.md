@@ -73,7 +73,7 @@ Which produces the following chart:
 
 Now, as previously mentioned, the following formula can be used to calculate an athlete's time to exhaustion when exercising at a fixed power output when both their critical power adn W' are known: ```Time to Exhaustion = W’ / Power - Critical Power```. For example, if an athlete's critical power is 306 watts, their W' is 50664 joules we can use the following formula to see how long they can sustain a fixed power output of 500 watts: ```Time to exhaustion = 50664 / 500 - 306 = 261 seconds```
 
-However, a major limitation of the formula above is that it's only applicable during fixed power output work bouts and does not account for scenarios where poewr output varies, such as during interval training or racing where power can fluctuate by a large degree moment to moment. In these scenarios, it's necessary to go beyond the traditional critical power model. 
+However, a major limitation of the formula above is that it's only applicable during fixed power output work bouts and does not account for scenarios where power output varies, such as during interval training or racing where power can fluctuate by a large degree moment to moment. In these scenarios, it's necessary to go beyond the traditional critical power model. 
 
 ### Beyond Critical Power: The W' Balance Model
 
